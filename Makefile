@@ -1,6 +1,6 @@
 VERSION         := 0.0.1
 
-PACK            := xyz
+PACK            := team-permission
 PROJECT         := github.com/pulumi/pulumi-${PACK}
 
 PROVIDER        := pulumi-resource-${PACK}
@@ -8,7 +8,7 @@ CODEGEN         := pulumi-gen-${PACK}
 VERSION_PATH    := provider/pkg/version.Version
 
 WORKING_DIR     := $(shell pwd)
-SCHEMA_PATH     := ${WORKING_DIR}/schema.json
+SCHEMA_PATH     := ${WORKING_DIR}/schema.yaml
 
 generate:: gen_go_sdk gen_dotnet_sdk gen_nodejs_sdk gen_python_sdk
 
@@ -26,7 +26,7 @@ build_provider:: ensure
 	cd provider/cmd/${PROVIDER}/ && \
        		yarn install && \
        		yarn tsc && \
-       		cp package.json schema.json ./bin && \
+       		cp package.json schema.yaml ./bin && \
        		sed -i.bak -e "s/\$${VERSION}/$(VERSION)/g" bin/package.json
 
 install_provider:: PKG_ARGS := --no-bytecode --public-packages "*" --public

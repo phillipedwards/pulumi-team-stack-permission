@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/pulumi/pulumi/master/pkg/codegen/schema/pulumi.json
+---
+name: team-permission
+types:
+  team-permission:index:permissionScope
+    type: string
+    enum:
+      - value: admin
+        description: provides team admin access to stack
+      - value: edit
+        description: provides team edit access to stack
+      - value: read
+        description: provides team read access to stack
+resources:
+  team-permission:index:TeamPermission:
+    isComponent: true
+    inputProperties:
+      organization:
+        type: string
+        description: The organization where the stack resides
+      project:
+        type: string
+        description: The project where the stack resides
+      stack:
+        type: string
+        description: The stack that is the target of th permission
+      permissionScope:
+        type: string
+        plain: true
+        $ref: "#/types/team-permission:index:TeamPermission"
+        description: The level of access given to the team
+      team:
+        type: string
+        description: The team where the stack will be added
+    requiredInputs:
+      - permissionScope
+      - team
+language:
+  csharp:
+    packageReferences:
+      Pulumi: 3.*
+      Pulumi.PulumiService: 0.1.*
+  go:
+    generateResourceContainerTypes: true
+    liftSingleValueMethodReturns: true
+    importBasePath: github.com/phillipedwards/pulumi-team-stack-permission/sdk/go/team-permission
+    generateExtraInputTypes: true
+  nodejs:
+    dependencies:
+      "@pulumi/pulumiservice": "^0.1.0"
+    devDependencies:
+      typescript: "^3.7.0"
+  python:
+    requires:
+      pulumi: ">=3.0.0,<4.0.0"
+      pulumiservice: ">=0.1.0,<1.0.0"
